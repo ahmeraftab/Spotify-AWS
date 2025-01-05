@@ -1,0 +1,25 @@
+import boto3
+import json
+
+def lambda_handler(event, context):
+    s3 = boto3.client('s3')
+    raw_bucket = 'spotift-raw-data'
+    transformed_bucket = 'spotify-transformed-data-aa'
+    raw_file = 'raw_data.json'
+    transformed_file = 'spotify_transformed_data.json'
+
+    # Download raw data
+    raw_data = s3.get_object(Bucket=raw_bucket, Key=raw_file)
+    raw_content = json.loads(raw_data['Body'].read().decode('utf-8'))
+
+    # Transform data
+    transformed_data = [{"name": track["name"], "artist": track["artists"][0]["name"]} for track in raw_content]
+
+    # Upload transformed data
+    s3.put_object(
+        Bucket=transformed_bucket,
+        Key=transformed_file,
+        Body=json.dumps(transformed_data)
+    )
+
+    return {"statusCode": 200, "body": "Transformation complete"}
