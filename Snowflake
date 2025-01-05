@@ -1,0 +1,24 @@
+-- Step 1: Create or Replace Database
+CREATE OR REPLACE DATABASE spotify_data;
+
+-- Step 2: Create or Replace Schema
+CREATE OR REPLACE SCHEMA spotify_schema;
+
+-- Step 3: Create or Replace Table with Correct Columns (track_name and artist_name)
+CREATE OR REPLACE TABLE spotify_schema.spotify_tracks (
+    track_name STRING,      -- Column for track name
+    artist_name STRING      -- Column for artist name
+);
+
+-- Step 4: Create or Replace Stage to Reference S3 Bucket
+CREATE OR REPLACE STAGE spotify_stage
+    URL = 's3://spotify-transformed-data-aa/'
+    FILE_FORMAT = (TYPE = 'JSON');
+
+-- Step 5: Load Transformed Data from S3 into Snowflake Table
+COPY INTO spotify_schema.spotify_tracks (track_name, artist_name)
+FROM @spotify_stage/spotify_transformed_data.json
+FILE_FORMAT = (TYPE = 'JSON');
+
+-- Step 6: Verify Data
+SELECT * FROM spotify_schema.spotify_tracks;
