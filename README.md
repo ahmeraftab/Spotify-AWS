@@ -28,16 +28,6 @@ An end-to-end serverless data pipeline that extracts data from the Spotify API, 
 | Data Warehouse | Snowflake |
 | Analytics | Power BI |
 
-## Repository Structure
-
-` ` `
-├── lambda_extract.py       # Lambda function — Spotify API extraction
-├── lambda_transform.py     # Lambda function — data transformation
-├── snowflake_setup.sql     # Snowpipe + Snowflake schema setup
-├── architecture.jpg        # Pipeline architecture diagram
-└── README.md
-` ` `
-
 
 ## Key Learnings
 
